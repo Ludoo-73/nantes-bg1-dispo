@@ -75,7 +75,7 @@ table.grid button:hover{background:var(--bg)}
 <body>
 <main>
 <h1>Nantes BG 1</h1>
-<p class="sub">Championnat départemental DD1.1, saison 2026-2027. Indique ta disponibilité pour chaque journée à venir, puis envoie le récap sur le groupe.</p>
+<p class="sub">Championnat départemental DD1.1, saison 2026-2027. Indique ta disponibilité pour chaque journée, puis envoie le récap sur le groupe. Pas besoin de tout remplir d'un coup : reviens compléter plus tard et renvoie un nouveau récap.</p>
 <h2 id="whoh">Qui es-tu ?</h2>
 <div class="who" id="who" role="group" aria-labelledby="whoh"></div>
 <p class="note" id="note" role="status" hidden></p>
@@ -86,11 +86,11 @@ table.grid button:hover{background:var(--bg)}
     <button type="button" id="copyBtn">Copier ma réponse pour le groupe</button>
     <button type="button" id="shareBtn" class="alt" hidden>Partager…</button>
   </div>
-  <p class="sum">Colle le texte copié dans la conversation WhatsApp de l'équipe. Ludo l'importera dans sa page pour voir la synthèse.</p>
+  <p class="sum">Colle le texte copié dans la conversation WhatsApp de l'équipe. Tes réponses restent enregistrées sur ton téléphone : pour compléter ou modifier, reviens ici, ajuste, et renvoie un nouveau récap — seules les dates renseignées seront mises à jour.</p>
 </div>
 <details class="cap" id="cap">
   <summary>Zone capitaine — import et synthèse</summary>
-  <p class="sum" style="margin-top:10px">Colle ici les messages de réponse reçus sur le groupe (un ou plusieurs messages, voire tout l'historique copié : seules les lignes de code sont lues).</p>
+  <p class="sum" style="margin-top:10px">Colle ici les messages de réponse reçus sur le groupe (un ou plusieurs messages, voire tout l'historique copié : seules les lignes de code sont lues). Les réponses peuvent arriver en plusieurs fois : un nouvel envoi d'un joueur ne remplace que les dates qu'il a renseignées.</p>
   <textarea id="paste" rows="5" placeholder="Colle les messages WhatsApp ici…"></textarea>
   <div class="btns">
     <button type="button" class="primary" id="importBtn">Importer les réponses</button>
@@ -205,7 +205,8 @@ function importText(txt){
     if(!p){skipped.push(raw);continue;}
     var code=m[2].toLowerCase();
     if(code.length!==D.length){skipped.push(raw+" (code incomplet)");continue;}
-    var obj={};
+    // fusion date par date : un nouvel envoi ne remplace que les dates renseignées
+    var obj=Object.assign({},data[p]||{});
     for(var j=0;j<D.length;j++){if(code[j]!=="-")obj[D[j].id]=LTR2ST[code[j]];}
     data[p]=obj;found.push(p);
   }
