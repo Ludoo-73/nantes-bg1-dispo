@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nantes BG 1 – Disponibilités DD1.1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&display=swap">
+<style>
+:root{--bg:#ECEEE6;--card:#FAFAF6;--ink:#15191C;--mut:#5C645B;--line:#C6CBBE;--yel:#F2C230;--red:#C23B22;--onred:#fff;--focus:#1B5E8F;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1311;--card:#181F1B;--ink:#ECEFE6;--mut:#9AA397;--line:#303A34;--yel:#E5B72A;--red:#D9543B;--focus:#6DB3E8}}
+:root[data-theme="dark"]{--bg:#0F1311;--card:#181F1B;--ink:#ECEFE6;--mut:#9AA397;--line:#303A34;--yel:#E5B72A;--red:#D9543B;--focus:#6DB3E8}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:720px;margin:0 auto;padding:24px 16px 56px}
+h1,.dnum{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+h1{font-size:clamp(2.2rem,8vw,3.4rem);line-height:1;margin:0 0 6px;font-weight:800;letter-spacing:-.02em}
+.sub{margin:0 0 22px;color:var(--mut)}
+h2{font-size:1rem;margin:0 0 8px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.who{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px}
+.who button{min-height:44px;padding:0 16px;border:2px solid var(--ink);border-radius:999px;background:transparent;font-weight:600}
+.who button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.note{margin:0 0 16px;padding:10px 12px;border-left:4px solid var(--red);background:var(--card)}
+.note.ok{border-left-color:var(--yel)}
+.day{display:flex;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:0 0 14px}
+.date{flex:0 0 76px;text-align:center;border-right:1px solid var(--line);padding-right:14px}
+.dnum{display:block;font-size:2.6rem;line-height:1;font-weight:800}
+.dmon{display:block;color:var(--mut);font-size:.95rem}
+.body{flex:1;min-width:0}
+.lieu{margin:0 0 6px;font-size:1.15rem;font-weight:700}
+.lieu span{font-weight:400;color:var(--mut)}
+.m{margin:0 0 12px;padding:0;list-style:none}
+.m li{padding:2px 0}
+.m b{display:inline-block;min-width:3.6em}
+.sum{margin:0 0 8px;font-size:.9rem;color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.chip{padding:4px 10px;border-radius:999px;border:1.5px solid var(--line);font-size:.9rem;color:var(--mut)}
+.chip b{color:var(--ink);font-weight:600}
+.chip.ok{background:var(--yel);border-color:var(--yel);color:#15191C}
+.chip.ok b{color:#15191C}
+.chip.maybe{border:1.5px dashed var(--ink);color:var(--ink)}
+.chip.no{background:var(--red);border-color:var(--red);color:var(--onred)}
+.chip.no b{color:var(--onred)}
+.mine{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mine span{font-size:.9rem;color:var(--mut)}
+.mine button{min-height:44px;padding:0 14px;border:2px solid var(--ink);border-radius:8px;background:transparent;font-weight:600}
+.mine button[aria-pressed="true"].ok{background:var(--yel);border-color:var(--yel);color:#15191C}
+.mine button[aria-pressed="true"].maybe{border-style:dashed;background:var(--card);box-shadow:inset 0 0 0 2px var(--ink)}
+.mine button[aria-pressed="true"].no{background:var(--red);border-color:var(--red);color:var(--onred)}
+.send{margin:22px 0;padding:16px;background:var(--card);border:2px solid var(--ink);border-radius:10px}
+.send .btns{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+.send button{min-height:48px;padding:0 18px;border:2px solid var(--ink);border-radius:8px;background:var(--yel);color:#15191C;font-weight:700}
+.send button.alt{background:transparent;color:var(--ink)}
+.cap{margin:26px 0 0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.cap summary{cursor:pointer;font-weight:700}
+.cap textarea{width:100%;margin:10px 0;padding:10px;font:inherit;font-size:.95rem;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:8px;resize:vertical}
+.cap .btns{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.cap .btns button{min-height:44px;padding:0 14px;border:2px solid var(--ink);border-radius:8px;background:transparent;font-weight:600}
+.cap .btns button.primary{background:var(--ink);color:var(--bg)}
+.cap .btns button.danger{border-color:var(--red);color:var(--red)}
+.gridwrap{overflow-x:auto;margin:6px 0 4px}
+table.grid{border-collapse:collapse;font-size:.9rem}
+table.grid th,table.grid td{padding:4px 6px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+table.grid th{color:var(--mut);font-weight:600}
+table.grid td:first-child,table.grid th:first-child{text-align:left;font-weight:600}
+table.grid button{min-width:44px;min-height:40px;border:none;background:transparent;font-size:1.05rem;border-radius:8px}
+table.grid button:hover{background:var(--bg)}
+.off,.foot{color:var(--mut);font-size:.9rem;margin:18px 0 0}
+@media (max-width:480px){.day{flex-direction:column;gap:10px}.date{flex:none;display:flex;gap:8px;align-items:baseline;text-align:left;border-right:0;padding:0}}
+</style>
+</head>
+<body>
+<main>
+<h1>Nantes BG 1</h1>
+<p class="sub">Championnat départemental DD1.1, saison 2026-2027. Indique ta disponibilité pour chaque journée, puis envoie le récap sur le groupe. Pas besoin de tout remplir d'un coup : reviens compléter plus tard et renvoie un nouveau récap.</p>
+<h2 id="whoh">Qui es-tu ?</h2>
+<div class="who" id="who" role="group" aria-labelledby="whoh"></div>
+<p class="note" id="note" role="status" hidden></p>
+<div id="app"></div>
+<div class="send" id="send" hidden>
+  <h2>Envoyer mes dispos</h2>
+  <div class="btns">
+    <button type="button" id="copyBtn">Copier ma réponse pour le groupe</button>
+    <button type="button" id="shareBtn" class="alt" hidden>Partager…</button>
+  </div>
+  <p class="sum">Colle le texte copié dans la conversation WhatsApp de l'équipe. Tes réponses restent enregistrées sur ton téléphone : pour compléter ou modifier, reviens ici, ajuste, et renvoie un nouveau récap — seules les dates renseignées seront mises à jour.</p>
+</div>
+<details class="cap" id="cap">
+  <summary>Zone capitaine — import et synthèse</summary>
+  <p class="sum" style="margin-top:10px">Colle ici les messages de réponse reçus sur le groupe (un ou plusieurs messages, voire tout l'historique copié : seules les lignes de code sont lues). Les réponses peuvent arriver en plusieurs fois : un nouvel envoi d'un joueur ne remplace que les dates qu'il a renseignées.</p>
+  <textarea id="paste" rows="5" placeholder="Colle les messages WhatsApp ici…"></textarea>
+  <div class="btns">
+    <button type="button" class="primary" id="importBtn">Importer les réponses</button>
+    <button type="button" id="sumBtn">Copier la synthèse</button>
+    <button type="button" class="danger" id="resetBtn">Tout effacer</button>
+  </div>
+  <p class="sum">Corriger une réponse : touche une case pour faire défiler —, ✅, ❓, ❌.</p>
+  <div class="gridwrap"><div id="grid"></div></div>
+</details>
+<p class="off">Pas de match pour Nantes BG 1 les 17 janvier, 7 février et 18 avril.</p>
+<p class="foot">Calendrier d'après le PDF officiel du championnat. Le match du 20 septembre est déjà passé. Les réponses des autres joueurs n'apparaissent qu'après import dans la zone capitaine (sur l'appareil de Max).</p>
+</main>
+<script>
+(function(){
+"use strict";
+var P=["Max","Tom","Walid","Guillaume","Camille","Henri","Ludo"];
+var CAPTAIN="Max";
+var D=[
+{id:"2026-10-18",n:"18",mo:"oct. 2026",lieu:"Guérande",m:[["13h30","Guérande 6"],["15h30","Guérande 3"]]},
+{id:"2026-11-15",n:"15",mo:"nov. 2026",lieu:"Rezé",m:[["13h30","Guérande 5"],["15h30","Guérande 4"]]},
+{id:"2026-12-13",n:"13",mo:"déc. 2026",lieu:"Nantes BG",m:[["13h30","Rezé 5"],["15h30","Ancenis 3"]]},
+{id:"2027-03-07",n:"7",mo:"mars 2027",lieu:"Orvault",m:[["9h","Orvault 5"],["11h","Orvault 3"],["15h30","Ancenis 2"]]},
+{id:"2027-04-04",n:"4",mo:"avr. 2027",lieu:"Rezé",m:[["13h30","Rezé 6"],["15h30","Nantes RACC 4"]]}];
+var ST={ok:"Dispo",maybe:"Peut-être",no:"Indispo"};
+var ICON={ok:"✅",maybe:"❓",no:"❌"};
+var LTR={ok:"o",maybe:"p",no:"i"};
+var LTR2ST={o:"ok",p:"maybe",i:"no"};
+var CYCLE=[null,"ok","maybe","no"];
+var data={},me=null,msg="",msgOk=false,focusKey=null;
+try{data=JSON.parse(localStorage.getItem("bg1data")||"{}")||{};}catch(e){data={};}
+try{me=localStorage.getItem("bg1me");}catch(e){}
+if(P.indexOf(me)<0)me=null;
+var app=document.getElementById("app"),who=document.getElementById("who"),note=document.getElementById("note"),
+    send=document.getElementById("send"),grid=document.getElementById("grid"),
+    cap=document.getElementById("cap");
+
+function persist(){try{localStorage.setItem("bg1data",JSON.stringify(data));}catch(e){}}
+function shortDate(id){var p=id.split("-");return p[2]+"/"+p[1];}
+function hasAny(p){var d=data[p]||{};return D.some(function(x){return d[x.id];});}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+function render(){
+  who.innerHTML=P.map(function(p){return '<button type="button" data-me="'+p+'" aria-pressed="'+(p===me)+'">'+p+'</button>';}).join("");
+  note.hidden=!msg;note.textContent=msg;note.className="note"+(msgOk?" ok":"");
+  cap.hidden=(me!==CAPTAIN);
+  app.innerHTML=D.map(function(d){
+    var c={ok:0,maybe:0,no:0};
+    var chips=P.map(function(p){
+      var s=(data[p]||{})[d.id];if(c[s]!==undefined)c[s]++;
+      return '<span class="chip '+(s||"")+'"><b>'+p+'</b> '+(s?ST[s].toLowerCase():"?")+'</span>';
+    }).join("");
+    var pend=P.length-c.ok-c.maybe-c.no;
+    var sum=c.ok+" dispo, "+c.maybe+" peut-être, "+c.no+" indispo, "+pend+" sans réponse";
+    var mine="";
+    if(me){
+      mine='<div class="mine"><span>Ma réponse :</span>'+Object.keys(ST).map(function(k){
+        var on=(data[me]||{})[d.id]===k;
+        return '<button type="button" class="'+k+'" data-day="'+d.id+'" data-s="'+k+'" data-k="'+d.id+k+'" aria-pressed="'+on+'">'+ST[k]+'</button>';
+      }).join("")+'</div>';
+    }else{
+      mine='<p class="sum">Choisis ton prénom plus haut pour répondre.</p>';
+    }
+    return '<section class="day"><div class="date"><span class="dnum">'+d.n+'</span><span class="dmon">'+d.mo+'</span></div><div class="body">'+
+      '<p class="lieu">'+d.lieu+' <span>dimanche</span></p>'+
+      '<ul class="m">'+d.m.map(function(x){return '<li><b>'+x[0]+'</b> contre '+x[1]+'</li>';}).join("")+'</ul>'+
+      '<p class="sum">'+sum+'</p><div class="chips">'+chips+'</div>'+mine+'</div></section>';
+  }).join("");
+  send.hidden=!(me&&hasAny(me));
+  renderGrid();
+  if(focusKey){var el=document.querySelector('[data-k="'+focusKey+'"],[data-me="'+focusKey+'"]');if(el)el.focus();focusKey=null;}
+}
+
+function renderGrid(){
+  var head='<tr><th></th>'+D.map(function(d){return '<th>'+shortDate(d.id)+'</th>';}).join("")+'</tr>';
+  var rows=P.map(function(p){
+    return '<tr><td>'+p+'</td>'+D.map(function(d){
+      var s=(data[p]||{})[d.id]||null;
+      return '<td><button type="button" data-gp="'+p+'" data-gd="'+d.id+'" title="'+p+' '+shortDate(d.id)+'">'+(s?ICON[s]:"—")+'</button></td>';
+    }).join("")+'</tr>';
+  }).join("");
+  grid.innerHTML='<table class="grid">'+head+rows+'</table>';
+}
+
+// Texte envoyé sur le groupe : récap lisible + ligne de code importable
+function buildMsg(p){
+  var d=data[p]||{};
+  var line1=D.map(function(x){
+    var s=d[x.id];
+    return shortDate(x.id)+" "+(s?ICON[s]:"➖");
+  }).join(" · ");
+  var code=D.map(function(x){return LTR[d[x.id]]||"-";}).join("");
+  return "Dispos Nantes BG1 – "+p+"\n"+line1+"\nBG1:"+p+":"+code;
+}
+
+function copyText(t,done){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done,function(){fallback();});
+  }else fallback();
+  function fallback(){
+    var ta=document.createElement("textarea");
+    ta.value=t;ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand("copy");}catch(e){}
+    document.body.removeChild(ta);done();
+  }
+}
+
+function importText(txt){
+  var re=/BG1\s*:\s*([A-Za-zÀ-ÖØ-öø-ÿ'’\- ]+?)\s*:\s*([opiOPI\-]+)/g,m;
+  var found=[],skipped=[];
+  while((m=re.exec(txt))){
+    var raw=m[1].trim();
+    var p=null;
+    for(var i=0;i<P.length;i++){if(P[i].toLowerCase()===raw.toLowerCase()){p=P[i];break;}}
+    if(!p){skipped.push(raw);continue;}
+    var code=m[2].toLowerCase();
+    if(code.length!==D.length){skipped.push(raw+" (code incomplet)");continue;}
+    // fusion date par date : un nouvel envoi ne remplace que les dates renseignées
+    var obj=Object.assign({},data[p]||{});
+    for(var j=0;j<D.length;j++){if(code[j]!=="-")obj[D[j].id]=LTR2ST[code[j]];}
+    data[p]=obj;found.push(p);
+  }
+  if(found.length){persist();msgOk=true;msg="Réponses importées : "+found.join(", ")+(skipped.length?" — ignoré : "+skipped.join(", "):"")+".";}
+  else{msgOk=false;msg=skipped.length?"Code trouvé mais illisible : "+skipped.join(", ")+".":"Aucun code de réponse trouvé dans le texte collé.";}
+  render();
+}
+
+function buildSummary(){
+  var out=["Synthèse dispos Nantes BG1"];
+  D.forEach(function(d){
+    var g={ok:[],maybe:[],no:[],none:[]};
+    P.forEach(function(p){var s=(data[p]||{})[d.id];g[s||"none"].push(p);});
+    var line=shortDate(d.id)+" "+d.lieu+" : ✅ "+g.ok.length+" ("+(g.ok.join(", ")||"—")+")";
+    if(g.maybe.length)line+=" · ❓ "+g.maybe.join(", ");
+    if(g.no.length)line+=" · ❌ "+g.no.join(", ");
+    if(g.none.length)line+=" · sans réponse : "+g.none.join(", ");
+    out.push(line);
+  });
+  return out.join("\n");
+}
+
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-me]");
+  if(b){me=b.dataset.me;try{localStorage.setItem("bg1me",me);}catch(x){}focusKey=me;msg="";render();return;}
+  var s=e.target.closest("[data-day]");
+  if(s){
+    if(!me)return;
+    var next=Object.assign({},data[me]||{});
+    if(next[s.dataset.day]===s.dataset.s)delete next[s.dataset.day];else next[s.dataset.day]=s.dataset.s;
+    data[me]=next;persist();focusKey=s.dataset.k;msg="";render();return;
+  }
+  var g=e.target.closest("[data-gp]");
+  if(g){
+    var p=g.dataset.gp,dd=g.dataset.gd;
+    var cur=(data[p]||{})[dd]||null;
+    var nxt=CYCLE[(CYCLE.indexOf(cur)+1)%CYCLE.length];
+    var o=Object.assign({},data[p]||{});
+    if(nxt)o[dd]=nxt;else delete o[dd];
+    data[p]=o;persist();msg="";render();return;
+  }
+  if(e.target.closest("#copyBtn")){
+    copyText(buildMsg(me),function(){msgOk=true;msg="Réponse copiée — colle-la dans le groupe WhatsApp.";render();});
+    return;
+  }
+  if(e.target.closest("#shareBtn")){
+    var t=buildMsg(me);
+    if(navigator.share){navigator.share({text:t}).catch(function(){});}
+    else copyText(t,function(){msgOk=true;msg="Réponse copiée — colle-la dans le groupe WhatsApp.";render();});
+    return;
+  }
+  if(e.target.closest("#importBtn")){
+    importText(document.getElementById("paste").value);
+    return;
+  }
+  if(e.target.closest("#sumBtn")){
+    copyText(buildSummary(),function(){msgOk=true;msg="Synthèse copiée — colle-la où tu veux.";render();});
+    return;
+  }
+  if(e.target.closest("#resetBtn")){
+    if(confirm("Effacer toutes les réponses importées sur cet appareil ?")){
+      data={};persist();msgOk=true;msg="Réponses effacées.";render();
+    }
+    return;
+  }
+});
+
+if(navigator.share)document.getElementById("shareBtn").hidden=false;
+render();
+})();
+</script>
+</body>
+</html>
