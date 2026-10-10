@@ -86,7 +86,7 @@ table.grid button:hover{background:var(--bg)}
   <div class="btns">
     <button type="button" id="copyBtn">Copier ma réponse pour le groupe</button>
   </div>
-  <p class="sum">La synchro en direct est indisponible : colle ce texte dans la conversation WhatsApp de l'équipe, Ludo l'importera.</p>
+  <p class="sum">La synchro en direct est indisponible : colle ce texte dans la conversation WhatsApp de l'équipe, Max l'importera.</p>
 </div>
 <details class="cap" id="cap">
   <summary>Zone capitaine — import et synthèse</summary>
@@ -120,6 +120,7 @@ var FIREBASE_CONFIG={
 };
 
 var P=["Max","Tom","Walid","Guillaume","Camille","Henri","Ludo"];
+var CAPTAIN="Max";
 var D=[
 {id:"2026-10-18",n:"18",mo:"oct. 2026",lieu:"Guérande",m:[["13h30","Guérande 6"],["15h30","Guérande 3"]]},
 {id:"2026-11-15",n:"15",mo:"nov. 2026",lieu:"Rezé",m:[["13h30","Guérande 5"],["15h30","Guérande 4"]]},
@@ -136,7 +137,8 @@ try{data=JSON.parse(localStorage.getItem("bg1data")||"{}")||{};}catch(e){data={}
 try{me=localStorage.getItem("bg1me");}catch(e){}
 if(P.indexOf(me)<0)me=null;
 var app=document.getElementById("app"),who=document.getElementById("who"),note=document.getElementById("note"),
-    send=document.getElementById("send"),grid=document.getElementById("grid");
+    send=document.getElementById("send"),grid=document.getElementById("grid"),
+    cap=document.getElementById("cap");
 
 function persist(){try{localStorage.setItem("bg1data",JSON.stringify(data));}catch(e){}}
 function shortDate(id){var p=id.split("-");return p[2]+"/"+p[1];}
@@ -151,6 +153,7 @@ function push(p){
 function render(){
   who.innerHTML=P.map(function(p){return '<button type="button" data-me="'+p+'" aria-pressed="'+(p===me)+'">'+p+'</button>';}).join("");
   note.hidden=!msg;note.textContent=msg;note.className="note"+(msgOk?" ok":"");
+  cap.hidden=(me!==CAPTAIN);
   app.innerHTML=D.map(function(d){
     var c={ok:0,maybe:0,no:0};
     var chips=P.map(function(p){
