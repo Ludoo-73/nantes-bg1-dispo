@@ -70,6 +70,12 @@ table.grid th{color:var(--mut);font-weight:600}
 table.grid td:first-child,table.grid th:first-child{text-align:left;font-weight:600}
 table.grid button{min-width:44px;min-height:40px;border:none;background:transparent;font-size:1.05rem;border-radius:8px}
 table.grid button:hover{background:var(--bg)}
+.rep{display:block;margin-top:3px;font-size:.9rem;font-weight:600;color:var(--red)}
+.repbtn{border:none;background:none;color:var(--mut);font-size:.8rem;text-decoration:underline;padding:2px 4px;min-height:0}
+.repform{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+.repform input{font:inherit;font-size:.9rem;padding:5px 6px;border:1.5px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);max-width:120px}
+.repform input[data-rl]{max-width:150px}
+.repform button{min-height:36px;padding:0 12px;border:2px solid var(--ink);border-radius:6px;background:transparent;font-weight:600;font-size:.85rem}
 .off,.foot{color:var(--mut);font-size:.9rem;margin:18px 0 0}
 @media (max-width:480px){.day{flex-direction:column;gap:10px}.date{flex:none;display:flex;gap:8px;align-items:baseline;text-align:left;border-right:0;padding:0}}
 </style>
@@ -133,8 +139,9 @@ var ICON={ok:"✅",maybe:"❓",no:"❌"};
 var LTR={ok:"o",maybe:"p",no:"i"};
 var LTR2ST={o:"ok",p:"maybe",i:"no"};
 var CYCLE=[null,"ok","maybe","no"];
-var data={},me=null,msg="",msgOk=false,focusKey=null,db=null;
+var data={},me=null,msg="",msgOk=false,focusKey=null,db=null,reports={},editRep=null;
 try{data=JSON.parse(localStorage.getItem("bg1data")||"{}")||{};}catch(e){data={};}
+try{reports=JSON.parse(localStorage.getItem("bg1reports")||"{}")||{};}catch(e){reports={};}
 try{me=localStorage.getItem("bg1me");}catch(e){}
 if(P.indexOf(me)<0)me=null;
 var app=document.getElementById("app"),who=document.getElementById("who"),note=document.getElementById("note"),
@@ -142,6 +149,16 @@ var app=document.getElementById("app"),who=document.getElementById("who"),note=d
     cap=document.getElementById("cap");
 
 function persist(){try{localStorage.setItem("bg1data",JSON.stringify(data));}catch(e){}}
+function persistRep(){try{localStorage.setItem("bg1reports",JSON.stringify(reports));}catch(e){}}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function fmtDay(iso){return iso.split("-").reverse().join("/");}
+function fmtHour(h){return h.replace(":","h").replace(/^0/,"");}
+function pushReports(){
+  if(!db)return;
+  db.collection("meta").doc("reports").set(reports).catch(function(){
+    msgOk=false;msg="Le report n'a pas pu être enregistré. Réessaie dans un instant.";render();
+  });
+}
 function shortDate(id){var p=id.split("-");return p[2]+"/"+p[1];}
 function hasAny(p){var d=data[p]||{};return D.some(function(x){return d[x.id];});}
 function push(p){
@@ -174,7 +191,20 @@ function render(){
     }
     return '<section class="day"><div class="date"><span class="dnum">'+d.n+'</span><span class="dmon">'+d.mo+'</span></div><div class="body">'+
       '<p class="lieu">'+d.lieu+' <span>dimanche</span></p>'+
-      '<ul class="m">'+d.m.map(function(x){return '<li><b>'+x[0]+'</b> contre '+x[1]+'</li>';}).join("")+'</ul>'+
+      '<ul class="m">'+d.m.map(function(x,i){
+        var key=d.id+"#"+i,r=reports[key],s='<li><b>'+x[0]+'</b> contre '+x[1];
+        if(r)s+='<span class="rep">→ Reporté au '+fmtDay(r.d)+(r.h?' · '+fmtHour(r.h):'')+(r.l?' · '+esc(r.l):'')+'</span>';
+        if(me===CAPTAIN){
+          if(editRep===key){
+            s+='<span class="repform"><input type="date" data-rd value="'+(r?r.d:'')+'"><input type="time" data-rh value="'+(r?r.h:'')+'"><input type="text" data-rl placeholder="Lieu" maxlength="40" value="'+(r?esc(r.l):'')+'">'+
+              '<button type="button" data-repsave="'+key+'">Valider</button><button type="button" data-repcancel>Annuler</button></span>';
+          }else{
+            s+='<button type="button" class="repbtn" data-rep="'+key+'">'+(r?'Modifier le report':'Reporter')+'</button>';
+            if(r)s+='<button type="button" class="repbtn" data-repdel="'+key+'">Retirer</button>';
+          }
+        }
+        return s+'</li>';
+      }).join("")+'</ul>'+
       '<p class="sum">'+sum+'</p><div class="chips">'+chips+'</div>'+mine+'</div></section>';
   }).join("");
   send.hidden=!(me&&hasAny(me)&&!db);
@@ -264,6 +294,22 @@ document.addEventListener("click",function(e){
     if(next[s.dataset.day]===s.dataset.s)delete next[s.dataset.day];else next[s.dataset.day]=s.dataset.s;
     data[me]=next;persist();push(me);focusKey=s.dataset.k;msg="";render();return;
   }
+  var rp=e.target.closest("[data-rep]");
+  if(rp){editRep=rp.dataset.rep;render();return;}
+  if(e.target.closest("[data-repcancel]")){editRep=null;render();return;}
+  var rdel=e.target.closest("[data-repdel]");
+  if(rdel){
+    var orp=Object.assign({},reports);delete orp[rdel.dataset.repdel];
+    reports=orp;persistRep();pushReports();render();return;
+  }
+  var rs=e.target.closest("[data-repsave]");
+  if(rs){
+    var f=document.querySelector(".repform");
+    var dv=f.querySelector("[data-rd]").value,hv=f.querySelector("[data-rh]").value,lv=f.querySelector("[data-rl]").value.trim();
+    var ors=Object.assign({},reports);
+    if(!dv&&!hv&&!lv)delete ors[rs.dataset.repsave];else ors[rs.dataset.repsave]={d:dv,h:hv,l:lv};
+    reports=ors;editRep=null;persistRep();pushReports();render();return;
+  }
   var g=e.target.closest("[data-gp]");
   if(g){
     var p=g.dataset.gp,dd=g.dataset.gd;
@@ -288,7 +334,10 @@ document.addEventListener("click",function(e){
   if(e.target.closest("#resetBtn")){
     if(confirm("Effacer toutes les réponses pour tout le monde ?")){
       data={};persist();
-      if(db)P.forEach(function(p){db.collection("dispo").doc(p).delete().catch(function(){});});
+      if(db){
+        P.forEach(function(p){db.collection("dispo").doc(p).delete().catch(function(){});});
+        db.collection("meta").doc("reports").delete().catch(function(){});
+      }
       msgOk=true;msg="Réponses effacées.";render();
     }
     return;
@@ -306,6 +355,9 @@ if(FIREBASE_CONFIG&&window.firebase){
     },function(){
       msgOk=false;msg="La synchronisation s'est interrompue. Recharge la page.";render();
     });
+    db.collection("meta").doc("reports").onSnapshot(function(snap){
+      reports=snap.data()||{};persistRep();render();
+    },function(){});
   }catch(e){db=null;}
 }
 if(!db&&FIREBASE_CONFIG){msgOk=false;msg="Connexion à la base impossible — réponses locales seulement.";render();}
