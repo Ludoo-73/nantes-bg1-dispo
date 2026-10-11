@@ -41,6 +41,7 @@ a.adr{color:var(--mut)}
 .tlab{margin:0 0 6px}
 .tlab b{display:inline-block;min-width:5.6em}
 .tlab span{color:var(--mut);font-size:.9rem}
+.calbtn{min-height:36px;margin-left:8px;padding:2px 10px;border:1.5px solid var(--line);border-radius:999px;background:transparent;color:var(--mut);font-size:.85rem;vertical-align:middle}
 .sum{margin:0 0 8px;font-size:.9rem;color:var(--mut)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
 .chip{padding:4px 10px;border-radius:999px;border:1.5px solid var(--line);font-size:.9rem;color:var(--mut)}
@@ -112,13 +113,13 @@ var CAPTAIN="Max";
 /* Chaque événement : jours = [libellé jour, catégorie]. ins = ouverture des inscriptions. */
 var CAT_V="Espoirs &amp; vétérans",CAT_S="Individuel (mixte, féminin, jeunes)";
 var EV=[
-{id:"tr2-gue",nom:"TR2 — Guérande",adr:"10 av. Gustave Flaubert, 44350 Guérande",per:"23–25 oct.",ins:"Inscriptions ouvertes le lun. 5 oct. à 20h",jours:[["ven. 23 oct.",CAT_V],["sam. 24 oct.",CAT_S]]},
-{id:"tr3-reze",nom:"TR3 — Rezé",adr:"26 rue Félix Faure, 44400 Rezé",per:"18–20 déc.",ins:"Inscriptions ouvertes le lun. 30 nov. à 20h",jours:[["sam. 19 déc.",CAT_S]]},
-{id:"tr4-herb",nom:"TR4 — Les Herbiers",adr:"Les Herbiers",per:"22–24 janv.",ins:"Inscriptions ouvertes le lun. 4 janv. à 20h",jours:[["ven. 22 janv.",CAT_V],["sam. 23 janv.",CAT_S]]},
-{id:"tr5-lrsy",nom:"TR5 — La Roche-sur-Yon",adr:"La Roche-sur-Yon",per:"12–14 fév.",ins:"Inscriptions ouvertes le lun. 25 janv. à 20h",jours:[["ven. 12 fév.",CAT_V],["sam. 13 fév.",CAT_S]]},
-{id:"tr6-sth",nom:"TR6 + Coupe PDL — Ste Hermine",adr:"Sainte-Hermine",per:"26–27 mars",ins:"Inscriptions ouvertes le lun. 8 mars à 20h",jours:[["ven. 26 mars",CAT_V],["sam. 27 mars","Coupe PDL / individuel"]]},
-{id:"tr7-baune",nom:"TR7 — Bauné",adr:"Bauné",per:"24–25 avr.",ins:"Inscriptions ouvertes le lun. 5 avr. à 20h",jours:[["sam. 24 avr.",CAT_S]]},
-{id:"tr8-herb",nom:"TR8 — Les Herbiers",adr:"Les Herbiers",per:"21–23 mai",ins:"Inscriptions ouvertes le lun. 3 mai à 20h",jours:[["ven. 21 mai",CAT_V],["sam. 22 mai",CAT_S]]}
+{id:"tr2-gue",nom:"TR2 — Guérande",adr:"10 av. Gustave Flaubert, 44350 Guérande",per:"23–25 oct.",ins:"Inscriptions ouvertes le lun. 5 oct. à 20h",jours:[["ven. 23 oct.",CAT_V,"2026-10-23"],["sam. 24 oct.",CAT_S,"2026-10-24"]]},
+{id:"tr3-reze",nom:"TR3 — Rezé",adr:"26 rue Félix Faure, 44400 Rezé",per:"18–20 déc.",ins:"Inscriptions ouvertes le lun. 30 nov. à 20h",jours:[["sam. 19 déc.",CAT_S,"2026-12-19"]]},
+{id:"tr4-herb",nom:"TR4 — Les Herbiers",adr:"Les Herbiers",per:"22–24 janv.",ins:"Inscriptions ouvertes le lun. 4 janv. à 20h",jours:[["ven. 22 janv.",CAT_V,"2027-01-22"],["sam. 23 janv.",CAT_S,"2027-01-23"]]},
+{id:"tr5-lrsy",nom:"TR5 — La Roche-sur-Yon",adr:"La Roche-sur-Yon",per:"12–14 fév.",ins:"Inscriptions ouvertes le lun. 25 janv. à 20h",jours:[["ven. 12 fév.",CAT_V,"2027-02-12"],["sam. 13 fév.",CAT_S,"2027-02-13"]]},
+{id:"tr6-sth",nom:"TR6 + Coupe PDL — Ste Hermine",adr:"Sainte-Hermine",per:"26–27 mars",ins:"Inscriptions ouvertes le lun. 8 mars à 20h",jours:[["ven. 26 mars",CAT_V,"2027-03-26"],["sam. 27 mars","Coupe PDL / individuel","2027-03-27"]]},
+{id:"tr7-baune",nom:"TR7 — Bauné",adr:"Bauné",per:"24–25 avr.",ins:"Inscriptions ouvertes le lun. 5 avr. à 20h",jours:[["sam. 24 avr.",CAT_S,"2027-04-24"]]},
+{id:"tr8-herb",nom:"TR8 — Les Herbiers",adr:"Les Herbiers",per:"21–23 mai",ins:"Inscriptions ouvertes le lun. 3 mai à 20h",jours:[["ven. 21 mai",CAT_V,"2027-05-21"],["sam. 22 mai",CAT_S,"2027-05-22"]]}
 ];
 
 /* aplatit la liste des clés jour : id:index */
@@ -139,6 +140,23 @@ function clean(o){var r={};Object.keys(o||{}).forEach(function(k){if(KEYS.indexO
 function persist(){try{localStorage.setItem("bg1trdata",JSON.stringify(data));}catch(e){}}
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 function mapUrl(q){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);}
+function icsEsc(s){return String(s).replace(/&amp;/g,"&").replace(/\\/g,"\\\\").replace(/,/g,"\\,").replace(/;/g,"\\;").replace(/\n/g,"\\n");}
+function downloadCal(key){
+  var p=key.split(":"),ev=null;EV.forEach(function(x){if(x.id===p[0])ev=x;});
+  if(!ev)return;var j=ev.jours[+p[1]],iso=j[2];if(!iso)return;
+  var d=iso.replace(/-/g,""),next=new Date(iso+"T12:00:00");next.setDate(next.getDate()+1);
+  var nd=next.getFullYear()+("0"+(next.getMonth()+1)).slice(-2)+("0"+next.getDate()).slice(-2);
+  var title=ev.nom+" — "+j[0]+" ("+j[1]+")";
+  var desc=(ev.ins||"Tournoi régional FFB")+"\nDispo équipe : https://ludoo-73.github.io/nantes-bg1-dispo/tournois.html";
+  var ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//NantesBG1//Dispo//FR","BEGIN:VEVENT",
+    "UID:"+key+"@nantesbg1","DTSTART;VALUE=DATE:"+d,"DTEND;VALUE=DATE:"+nd,
+    "SUMMARY:"+icsEsc(title),"LOCATION:"+icsEsc(ev.adr||ev.nom),"DESCRIPTION:"+icsEsc(desc),
+    "END:VEVENT","END:VCALENDAR"].join("\r\n");
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([ics],{type:"text/calendar"}));
+  a.download="tr-"+d+".ics";document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);
+}
 function push(p){
   if(!db)return;
   db.collection("dispotr").doc(p).set(data[p]||{}).catch(function(){
@@ -168,7 +186,7 @@ function render(){
           return '<button type="button" class="'+k+'" data-day="'+key+'" data-s="'+k+'" data-k="'+key+k+'" aria-pressed="'+on+'">'+ST[k]+'</button>';
         }).join("")+'</div>';
       }
-      return '<div class="tday"><p class="tlab"><b>'+j[0]+'</b> <span>'+j[1]+'</span></p>'+
+      return '<div class="tday"><p class="tlab"><b>'+j[0]+'</b> <span>'+j[1]+'</span>'+(j[2]?'<button type="button" class="calbtn" data-cal="'+key+'" title="Ajouter cette date à mon agenda">📅 Agenda</button>':'')+'</p>'+
         '<div class="chips">'+chips+'</div><p class="sum">'+sum+'</p>'+mine+'</div>';
     }).join("");
     return '<section class="day"><div class="date"><span class="dnum">'+e.nom.split(" ")[0]+'</span><span class="dmon">'+e.per+'</span></div><div class="body">'+
@@ -224,6 +242,8 @@ function buildSummary(){
 }
 
 document.addEventListener("click",function(e){
+  var cb=e.target.closest("[data-cal]");
+  if(cb){downloadCal(cb.dataset.cal);return;}
   var b=e.target.closest("[data-me]");
   if(b){me=b.dataset.me;try{localStorage.setItem("bg1me",me);}catch(x){}focusKey=me;msg="";render();return;}
   var s=e.target.closest("[data-day]");

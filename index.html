@@ -35,6 +35,7 @@ button:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px so
 .lieu{margin:0 0 2px;font-size:1.15rem;font-weight:700}
 .lieu span{font-weight:400;color:var(--mut)}
 .adr{display:block;margin:0 0 8px;font-size:.9rem;color:var(--mut)}
+.calbtn{min-height:36px;margin-left:6px;padding:2px 10px;border:1.5px solid var(--line);border-radius:999px;background:transparent;color:var(--mut);font-size:.8rem;font-weight:400;vertical-align:middle}
 a.adr{color:var(--mut)}
 .rep a.adr{display:inline;color:inherit}
 .m{margin:0 0 12px;padding:0;list-style:none}
@@ -158,6 +159,20 @@ function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g
 function fmtDay(iso){return iso.split("-").reverse().join("/");}
 function fmtHour(h){return h.replace(":","h").replace(/^0/,"");}
 function mapUrl(q){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);}
+function icsEsc(s){return String(s).replace(/&amp;/g,"&").replace(/\\/g,"\\\\").replace(/,/g,"\\,").replace(/;/g,"\\;").replace(/\n/g,"\\n");}
+function downloadCal(d){
+  var iso=d.id,d8=iso.replace(/-/g,""),next=new Date(iso+"T12:00:00");next.setDate(next.getDate()+1);
+  var nd=next.getFullYear()+("0"+(next.getMonth()+1)).slice(-2)+("0"+next.getDate()).slice(-2);
+  var desc="Championnat DD1.1\n"+d.m.map(function(x){return x[0]+" vs "+x[1];}).join("\n")+"\nDispo équipe : https://ludoo-73.github.io/nantes-bg1-dispo/";
+  var ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//NantesBG1//Dispo//FR","BEGIN:VEVENT",
+    "UID:"+d.id+"@nantesbg1","DTSTART;VALUE=DATE:"+d8,"DTEND;VALUE=DATE:"+nd,
+    "SUMMARY:"+icsEsc("DD1.1 — "+d.lieu),"LOCATION:"+icsEsc(d.adr||d.lieu),"DESCRIPTION:"+icsEsc(desc),
+    "END:VEVENT","END:VCALENDAR"].join("\r\n");
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([ics],{type:"text/calendar"}));
+  a.download="dd-"+d8+".ics";document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);
+}
 function pushReports(){
   if(!db)return;
   db.collection("meta").doc("reports").set(reports).catch(function(){
@@ -195,7 +210,7 @@ function render(){
       mine='<p class="sum">Choisis ton prénom plus haut pour répondre.</p>';
     }
     return '<section class="day"><div class="date"><span class="dnum">'+d.n+'</span><span class="dmon">'+d.mo+'</span></div><div class="body">'+
-      '<p class="lieu">'+d.lieu+' <span>dimanche</span></p>'+
+      '<p class="lieu">'+d.lieu+' <span>dimanche</span> <button type="button" class="calbtn" data-cal="'+d.id+'" title="Ajouter cette journée à mon agenda">📅 Agenda</button></p>'+
       (d.adr?'<a class="adr" href="'+mapUrl(d.adr)+'" target="_blank" rel="noopener">📍 '+d.adr+'</a>':'')+
       '<ul class="m">'+d.m.map(function(x,i){
         var key=d.id+"#"+i,r=reports[key],s='<li><b>'+x[0]+'</b> contre '+x[1];
@@ -291,6 +306,8 @@ function buildSummary(){
 }
 
 document.addEventListener("click",function(e){
+  var cb=e.target.closest("[data-cal]");
+  if(cb){var dd=null;D.forEach(function(x){if(x.id===cb.dataset.cal)dd=x;});if(dd)downloadCal(dd);return;}
   var b=e.target.closest("[data-me]");
   if(b){me=b.dataset.me;try{localStorage.setItem("bg1me",me);}catch(x){}focusKey=me;msg="";render();return;}
   var s=e.target.closest("[data-day]");
