@@ -164,6 +164,10 @@ function downloadCal(d){
   var iso=d.id,d8=iso.replace(/-/g,""),next=new Date(iso+"T12:00:00");next.setDate(next.getDate()+1);
   var nd=next.getFullYear()+("0"+(next.getMonth()+1)).slice(-2)+("0"+next.getDate()).slice(-2);
   var desc="Championnat DD1.1\n"+d.m.map(function(x){return x[0]+" vs "+x[1];}).join("\n")+"\nDispo équipe : https://ludoo-73.github.io/nantes-bg1-dispo/";
+  if(/Android/i.test(navigator.userAgent)){
+    window.open("https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent("DD1.1 — "+d.lieu)+"&dates="+d8+"/"+nd+"&details="+encodeURIComponent(desc)+"&location="+encodeURIComponent(d.adr||d.lieu),"_blank");
+    return;
+  }
   var ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//NantesBG1//Dispo//FR","BEGIN:VEVENT",
     "UID:"+d.id+"@nantesbg1","DTSTART;VALUE=DATE:"+d8,"DTEND;VALUE=DATE:"+nd,
     "SUMMARY:"+icsEsc("DD1.1 — "+d.lieu),"LOCATION:"+icsEsc(d.adr||d.lieu),"DESCRIPTION:"+icsEsc(desc),

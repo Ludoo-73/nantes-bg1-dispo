@@ -148,6 +148,10 @@ function downloadCal(key){
   var nd=next.getFullYear()+("0"+(next.getMonth()+1)).slice(-2)+("0"+next.getDate()).slice(-2);
   var title=ev.nom+" — "+j[0]+" ("+j[1]+")";
   var desc=(ev.ins||"Tournoi régional FFB")+"\nDispo équipe : https://ludoo-73.github.io/nantes-bg1-dispo/tournois.html";
+  if(/Android/i.test(navigator.userAgent)){
+    window.open("https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(title.replace(/&amp;/g,"&"))+"&dates="+d+"/"+nd+"&details="+encodeURIComponent(desc)+"&location="+encodeURIComponent(ev.adr||ev.nom),"_blank");
+    return;
+  }
   var ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//NantesBG1//Dispo//FR","BEGIN:VEVENT",
     "UID:"+key+"@nantesbg1","DTSTART;VALUE=DATE:"+d,"DTEND;VALUE=DATE:"+nd,
     "SUMMARY:"+icsEsc(title),"LOCATION:"+icsEsc(ev.adr||ev.nom),"DESCRIPTION:"+icsEsc(desc),
