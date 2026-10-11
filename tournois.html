@@ -77,7 +77,7 @@ table.grid button:hover{background:var(--bg)}
 <body>
 <main>
 <h1>Nantes BG 1 — Tournois</h1>
-<p class="sub">Tournois régionaux (TR) de la saison — ouverts à tous les licenciés FFB sur inscription. Indique ta disponibilité <b>par journée</b> : vendredi = espoirs &amp; vétérans (dès 19h30), samedi = individuel (mixte, féminin, jeunes), dimanche = par équipe + finales.</p>
+<p class="sub">Tournois régionaux (TR) de la saison — ouverts à tous les licenciés FFB sur inscription. Indique ta disponibilité <b>par journée</b> : vendredi = espoirs &amp; vétérans (dès 19h30), samedi = individuel (mixte, féminin, jeunes). Le dimanche (par équipe) n'est pas affiché.</p>
 <h2 id="whoh">Qui es-tu ?</h2>
 <div class="who" id="who" role="group" aria-labelledby="whoh"></div>
 <p class="note" id="note" role="status" hidden></p>
@@ -110,16 +110,15 @@ var P=["Max","Tom","Walid","Guillaume","Camille","Henri","Ludo"];
 var CAPTAIN="Max";
 
 /* Chaque événement : jours = [libellé jour, catégorie]. ins = ouverture des inscriptions. */
-var CAT_V="Espoirs &amp; vétérans",CAT_S="Individuel (mixte, féminin, jeunes)",CAT_D="Par équipe + finales";
+var CAT_V="Espoirs &amp; vétérans",CAT_S="Individuel (mixte, féminin, jeunes)";
 var EV=[
-{id:"tr2-gue",nom:"TR2 — Guérande",adr:"10 av. Gustave Flaubert, 44350 Guérande",per:"23–25 oct.",ins:"Inscriptions ouvertes le lun. 5 oct. à 20h",jours:[["ven. 23 oct.",CAT_V],["sam. 24 oct.",CAT_S],["dim. 25 oct.",CAT_D]]},
-{id:"tr3-reze",nom:"TR3 — Rezé",adr:"26 rue Félix Faure, 44400 Rezé",per:"18–20 déc.",ins:"Inscriptions ouvertes le lun. 30 nov. à 20h",jours:[["ven. 18 déc.",CAT_V],["sam. 19 déc.",CAT_S],["dim. 20 déc.",CAT_D]]},
-{id:"tr4-herb",nom:"TR4 — Les Herbiers",adr:"Les Herbiers",per:"22–24 janv.",ins:"Inscriptions ouvertes le lun. 4 janv. à 20h",jours:[["ven. 22 janv.",CAT_V],["sam. 23 janv.",CAT_S],["dim. 24 janv.",CAT_D]]},
-{id:"tr5-lrsy",nom:"TR5 — La Roche-sur-Yon",adr:"La Roche-sur-Yon",per:"12–14 fév.",ins:"Inscriptions ouvertes le lun. 25 janv. à 20h",jours:[["ven. 12 fév.",CAT_V],["sam. 13 fév.",CAT_S],["dim. 14 fév.",CAT_D]]},
-{id:"tr-rez",nom:"TR — Rezé",adr:"26 rue Félix Faure, 44400 Rezé",per:"19–21 fév.",ins:"",jours:[["ven. 19 fév.",CAT_V],["sam. 20 fév.",CAT_S],["dim. 21 fév.",CAT_D]]},
+{id:"tr2-gue",nom:"TR2 — Guérande",adr:"10 av. Gustave Flaubert, 44350 Guérande",per:"23–25 oct.",ins:"Inscriptions ouvertes le lun. 5 oct. à 20h",jours:[["ven. 23 oct.",CAT_V],["sam. 24 oct.",CAT_S]]},
+{id:"tr3-reze",nom:"TR3 — Rezé",adr:"26 rue Félix Faure, 44400 Rezé",per:"18–20 déc.",ins:"Inscriptions ouvertes le lun. 30 nov. à 20h",jours:[["ven. 18 déc.",CAT_V],["sam. 19 déc.",CAT_S]]},
+{id:"tr4-herb",nom:"TR4 — Les Herbiers",adr:"Les Herbiers",per:"22–24 janv.",ins:"Inscriptions ouvertes le lun. 4 janv. à 20h",jours:[["ven. 22 janv.",CAT_V],["sam. 23 janv.",CAT_S]]},
+{id:"tr5-lrsy",nom:"TR5 — La Roche-sur-Yon",adr:"La Roche-sur-Yon",per:"12–14 fév.",ins:"Inscriptions ouvertes le lun. 25 janv. à 20h",jours:[["ven. 12 fév.",CAT_V],["sam. 13 fév.",CAT_S]]},
 {id:"tr6-sth",nom:"TR6 + Coupe PDL — Ste Hermine",adr:"Sainte-Hermine",per:"26–27 mars",ins:"Inscriptions ouvertes le lun. 8 mars à 20h",jours:[["ven. 26 mars",CAT_V],["sam. 27 mars","Coupe PDL / individuel"]]},
-{id:"tr7-baune",nom:"TR7 — Bauné",adr:"Bauné",per:"24–25 avr.",ins:"Inscriptions ouvertes le lun. 5 avr. à 20h",jours:[["sam. 24 avr.",CAT_S],["dim. 25 avr.",CAT_D]]},
-{id:"tr8-herb",nom:"TR8 — Les Herbiers",adr:"Les Herbiers",per:"21–23 mai",ins:"Inscriptions ouvertes le lun. 3 mai à 20h",jours:[["ven. 21 mai",CAT_V],["sam. 22 mai",CAT_S],["dim. 23 mai",CAT_D]]}
+{id:"tr7-baune",nom:"TR7 — Bauné",adr:"Bauné",per:"24–25 avr.",ins:"Inscriptions ouvertes le lun. 5 avr. à 20h",jours:[["sam. 24 avr.",CAT_S]]},
+{id:"tr8-herb",nom:"TR8 — Les Herbiers",adr:"Les Herbiers",per:"21–23 mai",ins:"Inscriptions ouvertes le lun. 3 mai à 20h",jours:[["ven. 21 mai",CAT_V],["sam. 22 mai",CAT_S]]}
 ];
 
 /* aplatit la liste des clés jour : id:index */
