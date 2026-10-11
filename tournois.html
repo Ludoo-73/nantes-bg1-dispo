@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nantes BG 1 – Tournois TR/TN</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&display=swap">
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<style>
+:root{--bg:#ECEEE6;--card:#FAFAF6;--ink:#15191C;--mut:#5C645B;--line:#C6CBBE;--yel:#F2C230;--org:#E8912C;--red:#C23B22;--onred:#fff;--focus:#1B5E8F;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1311;--card:#181F1B;--ink:#ECEFE6;--mut:#9AA397;--line:#303A34;--yel:#E5B72A;--org:#EDA13B;--red:#D9543B;--focus:#6DB3E8}}
+:root[data-theme="dark"]{--bg:#0F1311;--card:#181F1B;--ink:#ECEFE6;--mut:#9AA397;--line:#303A34;--yel:#E5B72A;--org:#EDA13B;--red:#D9543B;--focus:#6DB3E8}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:720px;margin:0 auto;padding:24px 16px 56px}
+h1,.dnum{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+h1{font-size:clamp(2.2rem,8vw,3.4rem);line-height:1;margin:0 0 6px;font-weight:800;letter-spacing:-.02em}
+.sub{margin:0 0 22px;color:var(--mut)}
+h2{font-size:1rem;margin:0 0 8px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.who{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px}
+.who button{min-height:44px;padding:0 16px;border:2px solid var(--ink);border-radius:999px;background:transparent;font-weight:600}
+.who button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.note{margin:0 0 16px;padding:10px 12px;border-left:4px solid var(--red);background:var(--card)}
+.note.ok{border-left-color:var(--yel)}
+.day{display:flex;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin:0 0 14px}
+.date{flex:0 0 76px;text-align:center;border-right:1px solid var(--line);padding-right:14px}
+.dnum{display:block;font-size:1.6rem;line-height:1.1;font-weight:800}
+.dmon{display:block;color:var(--mut);font-size:.95rem}
+.body{flex:1;min-width:0}
+.lieu{margin:0 0 2px;font-size:1.15rem;font-weight:700}
+.lieu span{font-weight:400;color:var(--mut)}
+.adr{display:block;margin:0 0 8px;font-size:.9rem;color:var(--mut)}
+a.adr{color:var(--mut)}
+.ins{margin:0 0 10px;font-size:.9rem;font-weight:600;color:var(--red)}
+.tday{padding:8px 0;border-top:1px dashed var(--line)}
+.tlab{margin:0 0 6px}
+.tlab b{display:inline-block;min-width:5.6em}
+.tlab span{color:var(--mut);font-size:.9rem}
+.sum{margin:0 0 8px;font-size:.9rem;color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.chip{padding:4px 10px;border-radius:999px;border:1.5px solid var(--line);font-size:.9rem;color:var(--mut)}
+.chip b{color:var(--ink);font-weight:600}
+.chip.ok{background:var(--yel);border-color:var(--yel);color:#15191C}
+.chip.ok b{color:#15191C}
+.chip.maybe{background:var(--org);border-color:var(--org);color:#15191C}
+.chip.maybe b{color:#15191C}
+.chip.no{background:var(--red);border-color:var(--red);color:var(--onred)}
+.chip.no b{color:var(--onred)}
+.mine{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mine span{font-size:.9rem;color:var(--mut)}
+.mine button{min-height:44px;padding:0 14px;border:2px solid var(--ink);border-radius:8px;background:transparent;font-weight:600}
+.mine button[aria-pressed="true"].ok{background:var(--yel);border-color:var(--yel);color:#15191C}
+.mine button[aria-pressed="true"].maybe{background:var(--org);border-color:var(--org);color:#15191C}
+.mine button[aria-pressed="true"].no{background:var(--red);border-color:var(--red);color:var(--onred)}
+.cap{margin:26px 0 0;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.cap summary{cursor:pointer;font-weight:700}
+.cap .btns{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.cap .btns button{min-height:44px;padding:0 14px;border:2px solid var(--ink);border-radius:8px;background:transparent;font-weight:600}
+.cap .btns button.danger{border-color:var(--red);color:var(--red)}
+.gridwrap{overflow-x:auto;margin:6px 0 4px}
+table.grid{border-collapse:collapse;font-size:.9rem}
+table.grid th,table.grid td{padding:4px 6px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap}
+table.grid th{color:var(--mut);font-weight:600}
+table.grid td:first-child,table.grid th:first-child{text-align:left;font-weight:600}
+table.grid button{min-width:44px;min-height:40px;border:none;background:transparent;font-size:1.05rem;border-radius:8px}
+table.grid button:hover{background:var(--bg)}
+.off,.foot{color:var(--mut);font-size:.9rem;margin:18px 0 0}
+.foot a{color:var(--mut)}
+@media (max-width:480px){.day{flex-direction:column;gap:10px}.date{flex:none;display:flex;gap:8px;align-items:baseline;text-align:left;border-right:0;padding:0}}
+</style>
+</head>
+<body>
+<main>
+<h1>Nantes BG 1 — Tournois</h1>
+<p class="sub">Tournois régionaux (TR) et nationaux (TN) de la saison — ouverts à tous les licenciés FFB sur inscription. Indique ta disponibilité <b>par journée</b> : en général, vendredi = espoirs &amp; vétérans (dès 19h30), samedi = individuel (mixte, féminin, jeunes), dimanche = par équipe + finales.</p>
+<h2 id="whoh">Qui es-tu ?</h2>
+<div class="who" id="who" role="group" aria-labelledby="whoh"></div>
+<p class="note" id="note" role="status" hidden></p>
+<div id="app"></div>
+<details class="cap" id="cap">
+  <summary>Zone capitaine — synthèse</summary>
+  <div class="btns" style="margin-top:10px">
+    <button type="button" id="sumBtn">Copier la synthèse</button>
+    <button type="button" class="danger" id="resetBtn">Tout effacer</button>
+  </div>
+  <p class="sum">Corriger une réponse : touche une case pour faire défiler —, ✅, ❓, ❌.</p>
+  <div class="gridwrap"><div id="grid"></div></div>
+</details>
+<p class="off">Les inscriptions individuelles ouvrent à 20h le jour indiqué sur chaque tournoi (cellules rouges du calendrier PDL) — places limitées, connectez-vous à l'heure.</p>
+<p class="foot">D'après le calendrier prévisionnel Blackball PDL 2026-2027 — <a href="./">← retour aux dispos championnat DD1.1</a></p>
+</main>
+<script>
+(function(){
+"use strict";
+var FIREBASE_CONFIG={
+  apiKey:"AIzaSyAMhUEesMn-YnMdnpfW_E40Yq7SFhfuXbA",
+  authDomain:"nantes-bg1-dispo.firebaseapp.com",
+  projectId:"nantes-bg1-dispo",
+  storageBucket:"nantes-bg1-dispo.firebasestorage.app",
+  messagingSenderId:"273421009753",
+  appId:"1:273421009753:web:e3ab7663d2a3419caf4248"
+};
+
+var P=["Max","Tom","Walid","Guillaume","Camille","Henri","Ludo"];
+var CAPTAIN="Max";
+
+/* Chaque événement : jours = [libellé jour, catégorie]. ins = ouverture des inscriptions. */
+var CAT_V="Espoirs &amp; vétérans",CAT_S="Individuel (mixte, féminin, jeunes)",CAT_D="Par équipe + finales";
+var EV=[
+{id:"lrsy-oct",nom:"La Roche-sur-Yon",adr:"La Roche-sur-Yon",per:"17 oct.",ins:"",jours:[["sam. 17 oct.","Individuel (mixte)"]]},
+{id:"ancgue",nom:"TR2 — Ancenis &amp; Guérande",adr:"174 rue Lamoricière, 44150 Ancenis · 10 av. Gustave Flaubert, 44350 Guérande",per:"23–25 oct.",ins:"Inscriptions ouvertes le lun. 5 oct. à 20h",jours:[["ven. 23 oct.",CAT_V],["sam. 24 oct.",CAT_S],["dim. 25 oct.",CAT_D]]},
+{id:"segre",nom:"Segré",adr:"Segré-en-Anjou Bleu",per:"14 nov.",ins:"",jours:[["sam. 14 nov.","Individuel (mixte)"]]},
+{id:"tn2-albi",nom:"TN2 — Albi",adr:"Albi",per:"21–22 nov.",ins:"",jours:[["sam. 21 nov.",CAT_S],["dim. 22 nov.",CAT_D]]},
+{id:"angers",nom:"Angers",adr:"Angers",per:"12 déc.",ins:"",jours:[["sam. 12 déc.","Individuel (mixte)"]]},
+{id:"tr3-reze",nom:"TN3 + TR3 — Rezé",adr:"26 rue Félix Faure, 44400 Rezé",per:"18–20 déc.",ins:"Inscriptions ouvertes le lun. 30 nov. à 20h",jours:[["ven. 18 déc.",CAT_V],["sam. 19 déc.",CAT_S],["dim. 20 déc.",CAT_D]]},
+{id:"tn4-vil",nom:"TN4 — Villeneuve / Chavagnes",adr:"Villeneuve · Chavagnes-en-Paillers",per:"15–16 janv.",ins:"",jours:[["ven. 15 janv.",CAT_V],["sam. 16 janv.",CAT_S]]},
+{id:"tr4-herb",nom:"TR4 — Les Herbiers",adr:"Les Herbiers",per:"22–24 janv.",ins:"Inscriptions ouvertes le lun. 4 janv. à 20h",jours:[["ven. 22 janv.",CAT_V],["sam. 23 janv.",CAT_S],["dim. 24 janv.",CAT_D]]},
+{id:"tr5-lrsy",nom:"TR5 — La Roche-sur-Yon",adr:"La Roche-sur-Yon",per:"12–14 fév.",ins:"Inscriptions ouvertes le lun. 25 janv. à 20h",jours:[["ven. 12 fév.",CAT_V],["sam. 13 fév.",CAT_S],["dim. 14 fév.",CAT_D]]},
+{id:"fev-rez",nom:"Rezé (+TN5 Hazebrouck)",adr:"26 rue Félix Faure, 44400 Rezé",per:"19–21 fév.",ins:"",jours:[["ven. 19 fév.",CAT_V],["sam. 20 fév.",CAT_S],["dim. 21 fév.",CAT_D]]},
+{id:"tn6-chat",nom:"TN6 — Châtellerault",adr:"Châtellerault",per:"13–14 mars",ins:"",jours:[["sam. 13 mars",CAT_S],["dim. 14 mars",CAT_D]]},
+{id:"tr6-sth",nom:"TR6 + Coupe PDL — Ste Hermine",adr:"Sainte-Hermine",per:"26–27 mars",ins:"Inscriptions ouvertes le lun. 8 mars à 20h",jours:[["ven. 26 mars",CAT_V],["sam. 27 mars","Coupe PDL / individuel"]]},
+{id:"tn7",nom:"TN7",adr:"",per:"10–11 avr.",ins:"Inscriptions ouvertes le lun. 5 avr. à 20h",jours:[["sam. 10 avr.",CAT_S],["dim. 11 avr.",CAT_D]]},
+{id:"tr7-baune",nom:"TR7 — Bauné",adr:"Bauné",per:"24–25 avr.",ins:"",jours:[["sam. 24 avr.",CAT_S],["dim. 25 avr.",CAT_D]]},
+{id:"tn8-vill",nom:"TN8 + coupe — Villeneuve-sur-Lot",adr:"Villeneuve-sur-Lot",per:"7–9 mai",ins:"",jours:[["ven. 7 mai",CAT_V],["sam. 8 mai",CAT_S],["dim. 9 mai",CAT_D]]},
+{id:"tr8-herb",nom:"TR8 — Les Herbiers",adr:"Les Herbiers",per:"fin mai",ins:"Inscriptions ouvertes le lun. 3 mai à 20h",jours:[["ven. 21 mai",CAT_V],["sam. 29 mai",CAT_S],["dim. 30 mai",CAT_D]]},
+{id:"cdf",nom:"CDF — Coupe de France",adr:"",per:"26–27 juin",ins:"",jours:[["sam. 26 juin",CAT_S],["dim. 27 juin",CAT_D]]}
+];
+
+/* aplatit la liste des clés jour : id:index */
+var KEYS=[];EV.forEach(function(e){e.jours.forEach(function(_,i){KEYS.push(e.id+":"+i);});});
+
+var ST={ok:"Dispo",maybe:"Peut-être",no:"Indispo"};
+var ICON={ok:"✅",maybe:"❓",no:"❌"};
+var CYCLE=[null,"ok","maybe","no"];
+var data={},me=null,msg="",msgOk=false,focusKey=null,db=null;
+try{data=JSON.parse(localStorage.getItem("bg1trdata")||"{}")||{};}catch(e){data={};}
+try{me=localStorage.getItem("bg1me");}catch(e){}
+if(P.indexOf(me)<0)me=null;
+var app=document.getElementById("app"),who=document.getElementById("who"),note=document.getElementById("note"),
+    grid=document.getElementById("grid"),cap=document.getElementById("cap");
+
+function persist(){try{localStorage.setItem("bg1trdata",JSON.stringify(data));}catch(e){}}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function mapUrl(q){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);}
+function push(p){
+  if(!db)return;
+  db.collection("dispotr").doc(p).set(data[p]||{}).catch(function(){
+    msgOk=false;msg="La réponse de "+p+" n'a pas pu être synchronisée. Réessaie dans un instant.";render();
+  });
+}
+function dayLabel(k){var p=k.split(":"),e=null;EV.forEach(function(x){if(x.id===p[0])e=x;});return e?e.nom+" · "+e.jours[+p[1]][0]:k;}
+
+function render(){
+  who.innerHTML=P.map(function(p){return '<button type="button" data-me="'+p+'" aria-pressed="'+(p===me)+'">'+p+'</button>';}).join("");
+  note.hidden=!msg;note.textContent=msg;note.className="note"+(msgOk?" ok":"");
+  cap.hidden=(me!==CAPTAIN);
+  app.innerHTML=EV.map(function(e){
+    var jours=e.jours.map(function(j,i){
+      var key=e.id+":"+i;
+      var c={ok:0,maybe:0,no:0};
+      var chips=P.map(function(p){
+        var s=(data[p]||{})[key];if(c[s]!==undefined)c[s]++;
+        return '<span class="chip '+(s||"")+'"><b>'+p+'</b> '+(s?ST[s].toLowerCase():"?")+'</span>';
+      }).join("");
+      var pend=P.length-c.ok-c.maybe-c.no;
+      var sum=c.ok+" dispo · "+c.maybe+" peut-être · "+pend+" sans réponse";
+      var mine="";
+      if(me){
+        mine='<div class="mine"><span>Moi :</span>'+Object.keys(ST).map(function(k){
+          var on=(data[me]||{})[key]===k;
+          return '<button type="button" class="'+k+'" data-day="'+key+'" data-s="'+k+'" data-k="'+key+k+'" aria-pressed="'+on+'">'+ST[k]+'</button>';
+        }).join("")+'</div>';
+      }
+      return '<div class="tday"><p class="tlab"><b>'+j[0]+'</b> <span>'+j[1]+'</span></p>'+
+        '<div class="chips">'+chips+'</div><p class="sum">'+sum+'</p>'+mine+'</div>';
+    }).join("");
+    return '<section class="day"><div class="date"><span class="dnum">'+e.nom.split(" ")[0]+'</span><span class="dmon">'+e.per+'</span></div><div class="body">'+
+      '<p class="lieu">'+e.nom+'</p>'+
+      (e.adr?'<a class="adr" href="'+mapUrl(e.adr)+'" target="_blank" rel="noopener">📍 '+e.adr+'</a>':'')+
+      (e.ins?'<p class="ins">'+e.ins+'</p>':'')+jours+'</div></section>';
+  }).join("");
+  renderGrid();
+  if(focusKey){var el=document.querySelector('[data-k="'+focusKey+'"],[data-me="'+focusKey+'"]');if(el)el.focus();focusKey=null;}
+}
+
+function renderGrid(){
+  var head='<tr><th></th>'+EV.map(function(e){
+    return e.jours.map(function(j,i){return '<th>'+e.id.split("-")[0]+'<br>'+j[0].split(" ").slice(0,2).join(" ")+'</th>';}).join("");
+  }).join("")+'</tr>';
+  var rows=P.map(function(p){
+    return '<tr><td>'+p+'</td>'+EV.map(function(e){
+      return e.jours.map(function(j,i){
+        var key=e.id+":"+i,s=(data[p]||{})[key]||null;
+        return '<td><button type="button" data-gp="'+p+'" data-gd="'+key+'" title="'+p+' '+dayLabel(key)+'">'+(s?ICON[s]:"—")+'</button></td>';
+      }).join("");
+    }).join("")+'</tr>';
+  }).join("");
+  grid.innerHTML='<table class="grid">'+head+rows+'</table>';
+}
+
+function copyText(t,done){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done,function(){fallback();});
+  }else fallback();
+  function fallback(){
+    var ta=document.createElement("textarea");
+    ta.value=t;ta.style.position="fixed";ta.style.opacity="0";
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand("copy");}catch(e){}
+    document.body.removeChild(ta);done();
+  }
+}
+
+function buildSummary(){
+  var out=["Synthèse dispos Nantes BG1 — tournois"];
+  EV.forEach(function(e){
+    e.jours.forEach(function(j,i){
+      var key=e.id+":"+i,g={ok:[],maybe:[],no:[],none:[]};
+      P.forEach(function(p){var s=(data[p]||{})[key];g[s||"none"].push(p);});
+      var line=e.nom+" — "+j[0]+" : ✅ "+g.ok.length+" ("+(g.ok.join(", ")||"—")+")";
+      if(g.maybe.length)line+=" · ❓ "+g.maybe.join(", ");
+      if(g.no.length)line+=" · ❌ "+g.no.join(", ");
+      out.push(line);
+    });
+  });
+  return out.join("\n");
+}
+
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-me]");
+  if(b){me=b.dataset.me;try{localStorage.setItem("bg1me",me);}catch(x){}focusKey=me;msg="";render();return;}
+  var s=e.target.closest("[data-day]");
+  if(s){
+    if(!me)return;
+    var next=Object.assign({},data[me]||{});
+    if(next[s.dataset.day]===s.dataset.s)delete next[s.dataset.day];else next[s.dataset.day]=s.dataset.s;
+    data[me]=next;persist();push(me);focusKey=s.dataset.k;msg="";render();return;
+  }
+  var g=e.target.closest("[data-gp]");
+  if(g){
+    var p=g.dataset.gp,dd=g.dataset.gd;
+    var cur=(data[p]||{})[dd]||null;
+    var nxt=CYCLE[(CYCLE.indexOf(cur)+1)%CYCLE.length];
+    var o=Object.assign({},data[p]||{});
+    if(nxt)o[dd]=nxt;else delete o[dd];
+    data[p]=o;persist();push(p);msg="";render();return;
+  }
+  if(e.target.closest("#sumBtn")){
+    copyText(buildSummary(),function(){msgOk=true;msg="Synthèse copiée — colle-la où tu veux.";render();});
+    return;
+  }
+  if(e.target.closest("#resetBtn")){
+    if(confirm("Effacer toutes les réponses des tournois pour tout le monde ?")){
+      data={};persist();
+      if(db){P.forEach(function(p){db.collection("dispotr").doc(p).delete().catch(function(){});});}
+      msgOk=true;msg="Réponses effacées.";render();
+    }
+    return;
+  }
+});
+
+// Synchro Firestore
+if(FIREBASE_CONFIG&&window.firebase){
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG);
+    db=firebase.firestore();
+    db.collection("dispotr").onSnapshot(function(snap){
+      var d={};snap.forEach(function(x){d[x.id]=x.data()||{};});
+      data=d;persist();render();
+    },function(){
+      msgOk=false;msg="La synchronisation s'est interrompue. Recharge la page.";render();
+    });
+  }catch(e){db=null;}
+}
+if(!db&&FIREBASE_CONFIG){msgOk=false;msg="Connexion à la base impossible — réponses locales seulement.";render();}
+if(!FIREBASE_CONFIG){msgOk=false;msg="Synchro non configurée — réponses locales seulement.";render();}
+render();
+})();
+</script>
+</body>
+</html>
