@@ -129,11 +129,13 @@ var ICON={ok:"✅",maybe:"❓",no:"❌"};
 var CYCLE=[null,"ok","maybe","no"];
 var data={},me=null,msg="",msgOk=false,focusKey=null,db=null;
 try{data=JSON.parse(localStorage.getItem("bg1trdata")||"{}")||{};}catch(e){data={};}
+Object.keys(data).forEach(function(p){data[p]=clean(data[p]);});
 try{me=localStorage.getItem("bg1me");}catch(e){}
 if(P.indexOf(me)<0)me=null;
 var app=document.getElementById("app"),who=document.getElementById("who"),note=document.getElementById("note"),
     grid=document.getElementById("grid"),cap=document.getElementById("cap");
 
+function clean(o){var r={};Object.keys(o||{}).forEach(function(k){if(KEYS.indexOf(k)>=0)r[k]=o[k];});return r;}
 function persist(){try{localStorage.setItem("bg1trdata",JSON.stringify(data));}catch(e){}}
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 function mapUrl(q){return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(q);}
@@ -260,7 +262,7 @@ if(FIREBASE_CONFIG&&window.firebase){
     firebase.initializeApp(FIREBASE_CONFIG);
     db=firebase.firestore();
     db.collection("dispotr").onSnapshot(function(snap){
-      var d={};snap.forEach(function(x){d[x.id]=x.data()||{};});
+      var d={};snap.forEach(function(x){d[x.id]=clean(x.data()||{});});
       data=d;persist();render();
     },function(){
       msgOk=false;msg="La synchronisation s'est interrompue. Recharge la page.";render();
