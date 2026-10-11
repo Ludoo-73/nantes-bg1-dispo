@@ -114,7 +114,7 @@ var CAPTAIN="Max";
 var D=[
 {id:"2026-10-18",n:"18",mo:"oct. 2026",lieu:"Guérande",adr:"10 avenue Gustave Flaubert, 44350 Guérande",m:[["13h30","Guérande 6"],["15h30","Guérande 3"]]},
 {id:"2026-11-15",n:"15",mo:"nov. 2026",lieu:"Rezé",adr:"26 rue Félix Faure, 44400 Rezé",m:[["13h30","Guérande 5"],["15h30","Guérande 4"]]},
-{id:"2026-12-13",n:"13",mo:"déc. 2026",lieu:"Nantes BG",adr:"15 rue Gabriel Goudy, 44300 Nantes",m:[["13h30","Rezé 5"],["15h30","Ancenis 3"]]},
+{id:"2026-12-13",n:"13",mo:"déc. 2026",lieu:"Nantes BG",m:[["13h30","Rezé 5"],["15h30","Ancenis 3"]]},
 {id:"2027-03-07",n:"7",mo:"mars 2027",lieu:"Orvault",adr:"1 rue des Pins, 44700 Orvault",m:[["9h","Orvault 5"],["11h","Orvault 3"],["15h30","Ancenis 2"]]},
 {id:"2027-04-04",n:"4",mo:"avr. 2027",lieu:"Rezé",adr:"26 rue Félix Faure, 44400 Rezé",m:[["13h30","Rezé 6"],["15h30","Nantes RACC 4"]]}];
 var ST={ok:"Dispo",maybe:"Peut-être",no:"Indispo"};
@@ -159,7 +159,7 @@ function render(){
     }
     return '<section class="day"><div class="date"><span class="dnum">'+d.n+'</span><span class="dmon">'+d.mo+'</span></div><div class="body">'+
       '<p class="lieu">'+d.lieu+' <span>dimanche</span></p>'+
-      '<a class="adr" href="'+mapUrl(d.adr)+'" target="_blank" rel="noopener">📍 '+d.adr+'</a>'+
+      (d.adr?'<a class="adr" href="'+mapUrl(d.adr)+'" target="_blank" rel="noopener">📍 '+d.adr+'</a>':'')+
       '<ul class="m">'+d.m.map(function(x){return '<li><b>'+x[0]+'</b> contre '+x[1]+'</li>';}).join("")+'</ul>'+
       '<p class="sum">'+sum+'</p><div class="chips">'+chips+'</div>'+mine+'</div></section>';
   }).join("");
