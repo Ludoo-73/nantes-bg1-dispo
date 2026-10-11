@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Nantes BG 1 – Tournois TR/TN</title>
+<title>Nantes BG 1 – Tournois régionaux</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&display=swap">
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
@@ -77,7 +77,7 @@ table.grid button:hover{background:var(--bg)}
 <body>
 <main>
 <h1>Nantes BG 1 — Tournois</h1>
-<p class="sub">Tournois régionaux (TR) et nationaux (TN) de la saison — ouverts à tous les licenciés FFB sur inscription. Indique ta disponibilité <b>par journée</b> : en général, vendredi = espoirs &amp; vétérans (dès 19h30), samedi = individuel (mixte, féminin, jeunes), dimanche = par équipe + finales.</p>
+<p class="sub">Tournois régionaux (TR) de la saison — ouverts à tous les licenciés FFB sur inscription. Indique ta disponibilité <b>par journée</b> : vendredi = espoirs &amp; vétérans (dès 19h30), samedi = individuel (mixte, féminin, jeunes), dimanche = par équipe + finales.</p>
 <h2 id="whoh">Qui es-tu ?</h2>
 <div class="who" id="who" role="group" aria-labelledby="whoh"></div>
 <p class="note" id="note" role="status" hidden></p>
@@ -91,7 +91,7 @@ table.grid button:hover{background:var(--bg)}
   <p class="sum">Corriger une réponse : touche une case pour faire défiler —, ✅, ❓, ❌.</p>
   <div class="gridwrap"><div id="grid"></div></div>
 </details>
-<p class="off">Les inscriptions individuelles ouvrent à 20h le jour indiqué sur chaque tournoi (cellules rouges du calendrier PDL) — places limitées, connectez-vous à l'heure.</p>
+<p class="off">Les inscriptions individuelles ouvrent à 20h le jour indiqué sur chaque tournoi — places limitées, connectez-vous à l'heure.</p>
 <p class="foot">D'après le calendrier prévisionnel Blackball PDL 2026-2027 — <a href="./">← retour aux dispos championnat DD1.1</a></p>
 </main>
 <script>
@@ -112,23 +112,14 @@ var CAPTAIN="Max";
 /* Chaque événement : jours = [libellé jour, catégorie]. ins = ouverture des inscriptions. */
 var CAT_V="Espoirs &amp; vétérans",CAT_S="Individuel (mixte, féminin, jeunes)",CAT_D="Par équipe + finales";
 var EV=[
-{id:"lrsy-oct",nom:"La Roche-sur-Yon",adr:"La Roche-sur-Yon",per:"17 oct.",ins:"",jours:[["sam. 17 oct.","Individuel (mixte)"]]},
-{id:"ancgue",nom:"TR2 — Ancenis &amp; Guérande",adr:"174 rue Lamoricière, 44150 Ancenis · 10 av. Gustave Flaubert, 44350 Guérande",per:"23–25 oct.",ins:"Inscriptions ouvertes le lun. 5 oct. à 20h",jours:[["ven. 23 oct.",CAT_V],["sam. 24 oct.",CAT_S],["dim. 25 oct.",CAT_D]]},
-{id:"segre",nom:"Segré",adr:"Segré-en-Anjou Bleu",per:"14 nov.",ins:"",jours:[["sam. 14 nov.","Individuel (mixte)"]]},
-{id:"tn2-albi",nom:"TN2 — Albi",adr:"Albi",per:"21–22 nov.",ins:"",jours:[["sam. 21 nov.",CAT_S],["dim. 22 nov.",CAT_D]]},
-{id:"angers",nom:"Angers",adr:"Angers",per:"12 déc.",ins:"",jours:[["sam. 12 déc.","Individuel (mixte)"]]},
-{id:"tr3-reze",nom:"TN3 + TR3 — Rezé",adr:"26 rue Félix Faure, 44400 Rezé",per:"18–20 déc.",ins:"Inscriptions ouvertes le lun. 30 nov. à 20h",jours:[["ven. 18 déc.",CAT_V],["sam. 19 déc.",CAT_S],["dim. 20 déc.",CAT_D]]},
-{id:"tn4-vil",nom:"TN4 — Villeneuve / Chavagnes",adr:"Villeneuve · Chavagnes-en-Paillers",per:"15–16 janv.",ins:"",jours:[["ven. 15 janv.",CAT_V],["sam. 16 janv.",CAT_S]]},
+{id:"tr2-gue",nom:"TR2 — Guérande",adr:"10 av. Gustave Flaubert, 44350 Guérande",per:"23–25 oct.",ins:"Inscriptions ouvertes le lun. 5 oct. à 20h",jours:[["ven. 23 oct.",CAT_V],["sam. 24 oct.",CAT_S],["dim. 25 oct.",CAT_D]]},
+{id:"tr3-reze",nom:"TR3 — Rezé",adr:"26 rue Félix Faure, 44400 Rezé",per:"18–20 déc.",ins:"Inscriptions ouvertes le lun. 30 nov. à 20h",jours:[["ven. 18 déc.",CAT_V],["sam. 19 déc.",CAT_S],["dim. 20 déc.",CAT_D]]},
 {id:"tr4-herb",nom:"TR4 — Les Herbiers",adr:"Les Herbiers",per:"22–24 janv.",ins:"Inscriptions ouvertes le lun. 4 janv. à 20h",jours:[["ven. 22 janv.",CAT_V],["sam. 23 janv.",CAT_S],["dim. 24 janv.",CAT_D]]},
 {id:"tr5-lrsy",nom:"TR5 — La Roche-sur-Yon",adr:"La Roche-sur-Yon",per:"12–14 fév.",ins:"Inscriptions ouvertes le lun. 25 janv. à 20h",jours:[["ven. 12 fév.",CAT_V],["sam. 13 fév.",CAT_S],["dim. 14 fév.",CAT_D]]},
-{id:"fev-rez",nom:"Rezé (+TN5 Hazebrouck)",adr:"26 rue Félix Faure, 44400 Rezé",per:"19–21 fév.",ins:"",jours:[["ven. 19 fév.",CAT_V],["sam. 20 fév.",CAT_S],["dim. 21 fév.",CAT_D]]},
-{id:"tn6-chat",nom:"TN6 — Châtellerault",adr:"Châtellerault",per:"13–14 mars",ins:"",jours:[["sam. 13 mars",CAT_S],["dim. 14 mars",CAT_D]]},
+{id:"tr-rez",nom:"TR — Rezé",adr:"26 rue Félix Faure, 44400 Rezé",per:"19–21 fév.",ins:"",jours:[["ven. 19 fév.",CAT_V],["sam. 20 fév.",CAT_S],["dim. 21 fév.",CAT_D]]},
 {id:"tr6-sth",nom:"TR6 + Coupe PDL — Ste Hermine",adr:"Sainte-Hermine",per:"26–27 mars",ins:"Inscriptions ouvertes le lun. 8 mars à 20h",jours:[["ven. 26 mars",CAT_V],["sam. 27 mars","Coupe PDL / individuel"]]},
-{id:"tn7",nom:"TN7",adr:"",per:"10–11 avr.",ins:"Inscriptions ouvertes le lun. 5 avr. à 20h",jours:[["sam. 10 avr.",CAT_S],["dim. 11 avr.",CAT_D]]},
-{id:"tr7-baune",nom:"TR7 — Bauné",adr:"Bauné",per:"24–25 avr.",ins:"",jours:[["sam. 24 avr.",CAT_S],["dim. 25 avr.",CAT_D]]},
-{id:"tn8-vill",nom:"TN8 + coupe — Villeneuve-sur-Lot",adr:"Villeneuve-sur-Lot",per:"7–9 mai",ins:"",jours:[["ven. 7 mai",CAT_V],["sam. 8 mai",CAT_S],["dim. 9 mai",CAT_D]]},
-{id:"tr8-herb",nom:"TR8 — Les Herbiers",adr:"Les Herbiers",per:"fin mai",ins:"Inscriptions ouvertes le lun. 3 mai à 20h",jours:[["ven. 21 mai",CAT_V],["sam. 29 mai",CAT_S],["dim. 30 mai",CAT_D]]},
-{id:"cdf",nom:"CDF — Coupe de France",adr:"",per:"26–27 juin",ins:"",jours:[["sam. 26 juin",CAT_S],["dim. 27 juin",CAT_D]]}
+{id:"tr7-baune",nom:"TR7 — Bauné",adr:"Bauné",per:"24–25 avr.",ins:"Inscriptions ouvertes le lun. 5 avr. à 20h",jours:[["sam. 24 avr.",CAT_S],["dim. 25 avr.",CAT_D]]},
+{id:"tr8-herb",nom:"TR8 — Les Herbiers",adr:"Les Herbiers",per:"21–23 mai",ins:"Inscriptions ouvertes le lun. 3 mai à 20h",jours:[["ven. 21 mai",CAT_V],["sam. 22 mai",CAT_S],["dim. 23 mai",CAT_D]]}
 ];
 
 /* aplatit la liste des clés jour : id:index */
