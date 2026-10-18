@@ -94,15 +94,20 @@ Bloqué tant que la page est figée sur Nantes BG 1. Prérequis identifiés :
 - **Didactique** : la page doit s'expliquer seule — assistant de premier usage
   (équipe → joueurs → import du calendrier), micro-aide inline, tuto repliable
   en pied de page (comme tournoi-blackball.html).
-- **Calendrier mutualisé** : le PDF officiel est commun à toutes les équipes →
-  un **seul upload** (par l'admin) suffit : parsing côté navigateur, stockage
-  du résultat parsé dans `meta/calendrier` (JSON, quelques Ko — pas le PDF,
-  évite Firebase Storage). Le site signale « calendrier présent » ; chaque
-  équipe ne saisit que son **nom exact** (matching sur les équipes du
-  calendrier, suggestion si nom proche) et ses joueurs.
-  **Écriture du calendrier** : sans auth, protéger par un champ secret exigé
-  par la règle (`request.resource.data.cle == "…"`) — l'upload admin inclut
-  la clé, un robot ne la connaît pas.
+- **Calendrier mutualisé PAR DIVISION** : le PDF officiel est commun aux
+  équipes d'une même division, mais il y a **3 divisions** (DD 1.1, DD 1.2,
+  DD 1.3) et un seul PDF n'en couvre qu'une → docs `calendrier/{division}`
+  séparés, parsing côté navigateur, stockage du résultat parsé en JSON
+  (quelques Ko — pas le PDF, évite Firebase Storage).
+  **Provisionnement distribué** : l'upload ne doit pas dépendre d'un seul
+  admin — `allow create` libre si structure valide (un membre de la DD 1.2
+  importe le PDF pour toute sa division), `allow update/delete` réservés à
+  une clé secrète dans le doc (`request.resource.data.cle == "…"`) — un
+  calendrier en place ne peut pas être écrasé par un robot.
+  **Fallback** : si le PDF de la division n'est pas dispo → saisie manuelle
+  des journées proposée.
+  **Côté équipe** : saisie du nom exact (matching sur les équipes du
+  calendrier de sa division, suggestion si proche) + joueurs.
 
 ## Test local
 
