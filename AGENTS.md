@@ -82,6 +82,19 @@ Bloqué tant que la page est figée sur Nantes BG 1. Prérequis identifiés :
   dates — avec des équipes dynamiques il faudra passer à une validation
   structurelle (forme des docs, tailles max) à la place des listes explicites.
 
+## V2 envisagée — contraintes posées
+
+- **Coût zéro garanti** : rester sur le plan **Spark** (pas de carte attachée —
+  en cas de dépassement de quota, coupure du service plutôt que facture).
+  Conséquences : pas de Cloud Functions (exigent Blaze) → 100 % client +
+  règles ; quota largement suffisant même multi-équipes (~10 joueurs × ~10
+  journées ≈ quelques Ko et quelques centaines d'écritures/jour vs 20k/50k
+  quotidiens) ; le risque résiduel = spam d'écritures → mitigé par la
+  validation structurelle des docs.
+- **Didactique** : la page doit s'expliquer seule — assistant de premier usage
+  (équipe → joueurs → import du calendrier), micro-aide inline, tuto repliable
+  en pied de page (comme tournoi-blackball.html).
+
 ## Test local
 
 Ouvrir les fichiers en `file://` suffit pour l'UI (localStorage seul) — mais
