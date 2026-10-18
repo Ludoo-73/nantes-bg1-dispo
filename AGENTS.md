@@ -108,6 +108,15 @@ Bloqué tant que la page est figée sur Nantes BG 1. Prérequis identifiés :
   des journées proposée.
   **Côté équipe** : saisie du nom exact (matching sur les équipes du
   calendrier de sa division, suggestion si proche) + joueurs.
+- **Lien par équipe** : chaque équipe obtient un lien propre à elle
+  (`?equipe=CODE` — le code fait identifiant + accès, comme le code live de
+  tournoi-blackball.html).
+- **Hébergement club** : migration envisagée vers l'hébergement web du club
+  (projet site ASCBG en cours — WP multisite) au lieu de GitHub Pages.
+  Les pages sont statiques → simple copie de fichiers ; le repo GitHub peut
+  rester la source de vérité. ⚠ **ajouter le nouveau domaine aux referrers
+  de la clé API Firebase** (Cloud Console → Identifiants) sinon la synchro
+  sera refusée depuis le site du club.
 
 ## Test local
 
