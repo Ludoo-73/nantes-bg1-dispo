@@ -68,6 +68,20 @@ deux dans le même mouvement :
    anciens docs via la console Firestore (Data → collections `dispo`, `dispotr`,
    `meta/reports`).
 
+## Perspectives — partage à d'autres équipes
+
+Bloqué tant que la page est figée sur Nantes BG 1. Prérequis identifiés :
+
+- **Import PDF du calendrier officiel** pour extraire les journées de l'équipe
+  au lieu de `D`/`jours` codés en dur (parser via pdf.js CDN, ou collage du
+  texte du PDF — les dates/compétitions sont stables d'une année sur l'autre).
+- **Saisie du nom d'équipe + joueurs concernés** au premier usage au lieu de
+  `var P` codé en dur → les données deviendraient par équipe
+  (`?equipe=…` ou doc de config).
+- **⚠ Impact règles** : le modèle actuel whiteliste les noms de joueurs et les
+  dates — avec des équipes dynamiques il faudra passer à une validation
+  structurelle (forme des docs, tailles max) à la place des listes explicites.
+
 ## Test local
 
 Ouvrir les fichiers en `file://` suffit pour l'UI (localStorage seul) — mais
