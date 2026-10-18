@@ -46,7 +46,27 @@ en championnat départemental DD1.1 + organisation des tournois régionaux.
 - Les `firebase.html`/`whatsapp.html` dérivent d'index : une feature ajoutée à
   `index.html` ne va pas automatiquement dans les variantes.
 - Saison courante codée en dur (« 2026-2027 », liste des journées) — à revoir
-  à chaque nouvelle saison.
+  à chaque nouvelle saison (voir checklist ci-dessous).
+
+## Nouvelle saison — checklist
+
+Les règles Firestore **whitelistent joueurs + dates** : si on met à jour les
+pages sans les règles (ou l'inverse), les écritures sont refusées. Faire les
+deux dans le même mouvement :
+
+1. **Code** :
+   - `index.html` : `var P` (liste joueurs, ~l.134), `var D` (journées DD1.1,
+     ~l.136 — les `id` = clés utilisées en base), sous-titre « saison 20XX-20XX ».
+   - `tournois.html` : `var P` (~l.110) + liste des tournois (`id:"trN-ville"`,
+     `jours` — les clés en base sont `id:index`, ex `tr2-gue:0`).
+2. **Règles Firestore** (console → Firestore → Règles) :
+   - `dispo`/`dispotr` : liste `player in [...]` = nouveau `P`.
+   - `dispo` : `keys().hasOnly([...])` = nouveaux `id` de journées.
+   - `dispotr` : `keys().hasOnly([...])` = nouvelles clés `trX:idx`.
+3. **Purge des données de la saison passée** : le bouton reset de la page ne
+   supprime que les docs des joueurs du `P` courant — si `P` change, purger les
+   anciens docs via la console Firestore (Data → collections `dispo`, `dispotr`,
+   `meta/reports`).
 
 ## Test local
 
