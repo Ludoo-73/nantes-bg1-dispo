@@ -94,6 +94,15 @@ Bloqué tant que la page est figée sur Nantes BG 1. Prérequis identifiés :
 - **Didactique** : la page doit s'expliquer seule — assistant de premier usage
   (équipe → joueurs → import du calendrier), micro-aide inline, tuto repliable
   en pied de page (comme tournoi-blackball.html).
+- **Calendrier mutualisé** : le PDF officiel est commun à toutes les équipes →
+  un **seul upload** (par l'admin) suffit : parsing côté navigateur, stockage
+  du résultat parsé dans `meta/calendrier` (JSON, quelques Ko — pas le PDF,
+  évite Firebase Storage). Le site signale « calendrier présent » ; chaque
+  équipe ne saisit que son **nom exact** (matching sur les équipes du
+  calendrier, suggestion si nom proche) et ses joueurs.
+  **Écriture du calendrier** : sans auth, protéger par un champ secret exigé
+  par la règle (`request.resource.data.cle == "…"`) — l'upload admin inclut
+  la clé, un robot ne la connaît pas.
 
 ## Test local
 
